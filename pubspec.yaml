@@ -1,0 +1,55 @@
+name: Path_Pilot_AI
+description: "A new Flutter project."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.10.7
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  firebase_core: ^2.30.0
+  firebase_auth: ^4.17.0
+  google_sign_in: ^6.2.1
+  cloud_firestore: ^4.17.5
+  cupertino_icons: ^1.0.8
+  http: ^1.2.0
+
+
+
+dev_dependencies:
+  flutter_launcher_icons: ^0.13.1
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+# 👇 MOVE THIS OUTSIDE dev_dependencies
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/logo.png"   # put logo here
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/fonts/
+
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Regular.ttf
+        - asset: assets/fonts/Poppins-Bold.ttf
+        - asset: assets/fonts/Poppins-SemiBold.ttf
+
+    - family: DM Sans
+      fonts:
+        - asset: assets/fonts/DMSans_18pt-Regular.ttf
+
+    - family: CalSans
+      fonts:
+        - asset: assets/fonts/CalSans-Regular.ttf

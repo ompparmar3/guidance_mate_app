@@ -1,0 +1,1 @@
+{"flutter":{"platforms":{"android":{"default":{"projectId":"path-pilot-ai","appId":"1:569415207328:android:e35f6793585a4c25c73cc5","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"path-pilot-ai","configurations":{"android":"1:569415207328:android:e35f6793585a4c25c73cc5","ios":"1:569415207328:ios:8b5a28d49bcaa143c73cc5"}}}}}}
