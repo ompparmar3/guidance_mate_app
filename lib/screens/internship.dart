@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Internship extends StatelessWidget {
+class Internship extends StatefulWidget {
   const Internship({super.key});
 
+  @override
+  State<Internship> createState() => _InternshipState();
+}
+
+class _InternshipState extends State<Internship> {
   final List<String> categories = const [
     "All",
     "Web Dev",
@@ -12,56 +18,28 @@ class Internship extends StatelessWidget {
     "Finance"
   ];
 
-  final List<Map<String, dynamic>> internshipList = const [
-    {
-      "title": "Full Stack Developer",
-      "company": "Google India",
-      "location": "Remote",
-      "duration": "6 Months",
-      "stipend": "₹30,000 /mo",
-      "deadline": "15 Oct",
-      "color": Colors.blue,
-      "logo_char": "G",
-      "isHot": true,
-    },
-    {
-      "title": "UI/UX Designer",
-      "company": "Zomato",
-      "location": "Gurugram",
-      "duration": "3 Months",
-      "stipend": "₹20,000 /mo",
-      "deadline": "20 Oct",
-      "color": Colors.red,
-      "logo_char": "Z",
-      "isHot": false,
-    },
-    {
-      "title": "Data Analyst Intern",
-      "company": "Microsoft",
-      "location": "Bangalore",
-      "duration": "4 Months",
-      "stipend": "₹45,000 /mo",
-      "deadline": "12 Oct",
-      "color": Colors.blueAccent,
-      "logo_char": "M",
-      "isHot": true,
-    },
-    {
-      "title": "Marketing Intern",
-      "company": "Amazon",
-      "location": "Hyderabad",
-      "duration": "6 Months",
-      "stipend": "₹25,000 /mo",
-      "deadline": "25 Oct",
-      "color": Colors.orange,
-      "logo_char": "A",
-      "isHot": false,
-    },
-  ];
+  int selectedCategoryIndex = 0;
+
+  Color getColor(String name) {
+    switch (name.toLowerCase()) {
+      case "blue":
+        return Colors.blue;
+      case "red":
+        return Colors.red;
+      case "orange":
+        return Colors.orange;
+      case "green":
+        return Colors.green;
+      case "purple":
+        return Colors.purple;
+      default:
+        return Colors.blueGrey;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    const int selectedCategoryIndex = 0;
+    String selectedCategory = categories[selectedCategoryIndex];
 
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
@@ -95,7 +73,7 @@ class Internship extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 20),
-            // Welcome section
+
             const Text(
               "Find your dream\ninternship today 🚀",
               style: TextStyle(
@@ -105,9 +83,9 @@ class Internship extends StatelessWidget {
                 height: 1.2,
               ),
             ),
+
             const SizedBox(height: 20),
 
-            // Refined Search Bar
             Container(
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -130,9 +108,9 @@ class Internship extends StatelessWidget {
                 ),
               ),
             ),
+
             const SizedBox(height: 30),
 
-            // Categories with better styling
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -146,11 +124,14 @@ class Internship extends StatelessWidget {
                 ),
                 TextButton(
                   onPressed: () {},
-                  child: const Text("See all", style: TextStyle(color: Colors.blueAccent)),
+                  child: const Text("See all",
+                      style: TextStyle(color: Colors.blueAccent)),
                 ),
               ],
             ),
+
             const SizedBox(height: 10),
+
             SizedBox(
               height: 45,
               child: ListView.separated(
@@ -159,29 +140,43 @@ class Internship extends StatelessWidget {
                 separatorBuilder: (_, __) => const SizedBox(width: 12),
                 itemBuilder: (context, index) {
                   bool isSelected = selectedCategoryIndex == index;
-                  return AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    decoration: BoxDecoration(
-                      color: isSelected ? Colors.blueAccent : Colors.white,
-                      borderRadius: BorderRadius.circular(15),
-                      border: Border.all(
-                        color: isSelected ? Colors.blueAccent : Colors.grey.shade200,
+
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        selectedCategoryIndex = index;
+                      });
+                    },
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      decoration: BoxDecoration(
+                        color: isSelected ? Colors.blueAccent : Colors.white,
+                        borderRadius: BorderRadius.circular(15),
+                        border: Border.all(
+                          color: isSelected
+                              ? Colors.blueAccent
+                              : Colors.grey.shade200,
+                        ),
+                        boxShadow: isSelected
+                            ? [
+                          BoxShadow(
+                            color: Colors.blueAccent.withOpacity(0.2),
+                            blurRadius: 8,
+                            offset: const Offset(0, 4),
+                          )
+                        ]
+                            : [],
                       ),
-                      boxShadow: isSelected ? [
-                        BoxShadow(
-                          color: Colors.blueAccent.withOpacity(0.2),
-                          blurRadius: 8,
-                          offset: const Offset(0, 4),
-                        )
-                      ] : [],
-                    ),
-                    child: Center(
-                      child: Text(
-                        categories[index],
-                        style: TextStyle(
-                          color: isSelected ? Colors.white : Colors.grey.shade600,
-                          fontWeight: FontWeight.w600,
+                      child: Center(
+                        child: Text(
+                          categories[index],
+                          style: TextStyle(
+                            color: isSelected
+                                ? Colors.white
+                                : Colors.grey.shade600,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
                     ),
@@ -189,6 +184,7 @@ class Internship extends StatelessWidget {
                 },
               ),
             ),
+
             const SizedBox(height: 30),
 
             const Text(
@@ -199,18 +195,55 @@ class Internship extends StatelessWidget {
                 color: Colors.black87,
               ),
             ),
+
             const SizedBox(height: 20),
 
-            // Internship List
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: internshipList.length,
-              itemBuilder: (context, index) {
-                final item = internshipList[index];
-                return _buildModernInternshipCard(item);
+            StreamBuilder<QuerySnapshot>(
+              stream: selectedCategory == "All"
+                  ? FirebaseFirestore.instance
+                  .collection('internships')
+                  .snapshots()
+                  : FirebaseFirestore.instance
+                  .collection('internships')
+                  .where('category', isEqualTo: selectedCategory)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                  return const Center(child: Text("No internships found"));
+                }
+
+                final internships = snapshot.data!.docs;
+
+                return ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: internships.length,
+                  itemBuilder: (context, index) {
+                    final doc = internships[index];
+
+                    final data = {
+                      "title": doc['title'],
+                      "company": doc['company'],
+                      "location": doc['location'],
+                      "duration": doc['duration'],
+                      "stipend": doc['stipend'],
+                      "deadline": doc['deadline'],
+                      "color": getColor(doc['color']),
+                      "logo_char": doc['logo_char'],
+                      "isHot": doc['isHot'],
+                    };
+
+                    // ❌ REMOVED NAVIGATION
+                    return _buildModernInternshipCard(data);
+                  },
+                );
               },
             ),
+
             const SizedBox(height: 30),
           ],
         ),
@@ -239,7 +272,8 @@ class Internship extends StatelessWidget {
               top: 0,
               right: 20,
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding:
+                const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: const BoxDecoration(
                   color: Colors.orangeAccent,
                   borderRadius: BorderRadius.only(
@@ -330,7 +364,8 @@ class Internship extends StatelessWidget {
                         ],
                       ),
                     ),
-                    const Icon(Icons.bookmark_border_rounded, color: Colors.grey),
+                    const Icon(Icons.bookmark_border_rounded,
+                        color: Colors.grey),
                   ],
                 ),
                 const SizedBox(height: 20),
@@ -338,9 +373,11 @@ class Internship extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     _buildInfoItem(Icons.schedule_rounded, data['duration']!),
-                    _buildInfoItem(Icons.payments_outlined, data['stipend']!, isStipend: true),
+                    _buildInfoItem(Icons.payments_outlined, data['stipend']!,
+                        isStipend: true),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 6),
                       decoration: BoxDecoration(
                         color: Colors.blueAccent.shade700,
                         borderRadius: BorderRadius.circular(12),
@@ -361,7 +398,8 @@ class Internship extends StatelessWidget {
                 const SizedBox(height: 12),
                 Row(
                   children: [
-                    const Icon(Icons.timer_outlined, size: 14, color: Colors.grey),
+                    const Icon(Icons.timer_outlined,
+                        size: 14, color: Colors.grey),
                     const SizedBox(width: 6),
                     Text(
                       "Apply by ${data['deadline']}",
@@ -381,10 +419,12 @@ class Internship extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoItem(IconData icon, String text, {bool isStipend = false}) {
+  Widget _buildInfoItem(IconData icon, String text,
+      {bool isStipend = false}) {
     return Row(
       children: [
-        Icon(icon, size: 16, color: isStipend ? Colors.green : Colors.grey),
+        Icon(icon,
+            size: 16, color: isStipend ? Colors.green : Colors.grey),
         const SizedBox(width: 6),
         Text(
           text,
